@@ -1,61 +1,25 @@
 var todoList = {
     todos : [],
-    displayTodos : function () {
-        var todo = this.todos; // particular todo object of the array
-        // check if todos array is empty 
-        if(todo.length==0){
-            console.log('You have no todos !');
-            todosUl.innerHTML='You have no todos !';
-        //if not display list and status
-        }else{
-            // show text of all todos and status 
-            var status;
-            console.log("My todos :");
-            todosUl.innerHTML='My todos : ';
-            for (var i = 0; i < this.todos.length; i++){
-                if(todo[i].completed===true){status = "(X)";}// for console change status
-                else{status = "( )";}
-                var thisTodoText = todo[i].todoText ; 
-                // console.log(thisTodoText,  status);
-                // debugger;
-                var showTodo = function(todoText){ 
-                    // debugger
-                    // create and append a li to todosUl ul
-                    var aTodo = document.createElement("li"); 
-                    // check completed property and change status 
-                    if(todo[i].completed===true){
-                        // add strike tag
-                        var strikeThrough = document.createElement('strike');
-                        strikeThrough.innerHTML = todoText;
-                        aTodo.appendChild(strikeThrough);
-                    }else{aTodo.innerHTML = todoText;}
-                    aTodo.className = 'todo';
-                    todosUl.appendChild(aTodo);
-                }
-                showTodo(thisTodoText);
-            }
-        }
-    },
     addTodo : function(todotext){
         this.todos.push({
             todoText : todotext ,
             completed : false
         });
         
-        this.displayTodos();
+        
     },
     changeTodo : function(index, newtext){
         this.todos[index].todoText = newtext;
-        this.displayTodos();
+        
     },
     toggleCompleted : function(index){ 
         var thisTodo = this.todos[index];
         thisTodo.completed = !thisTodo.completed;
-        this.displayTodos();
+        
     },
     deleteTodo : function(index){
         this.todos.splice(index, 1) ;
-        this.displayTodos();
+        
     },
     //toggle All incomplete if all complete
     // toglle complete if else
@@ -76,44 +40,77 @@ var todoList = {
                 }
                 i++;
             }
-            this.displayTodos();
+            
         
     }
 };
 
 // html elements collecting
-var 
-todosUl = document.getElementById('todosUl'),
-// todos = document.getElementsByClassName('todo'),
-todoInput= document.getElementById('todoText'),
-todoNum = document.getElementById('todoNum'),
-newTodoText = document.getElementById('newTodoText');
+var todos = todoList.todos,
+        todosUl = document.getElementById('todosUl'),
+        todoInput= document.getElementById('todoText'),
+        todoNum = document.getElementById('todoNum'),
+        newTodoText = document.getElementById('newTodoText');
 
-var handlers = {
-    
-    addTodo: function(){
-        debugger;
-        if(todoInput.value){
-            todoList.addTodo(todoInput.value);
-            todoInput.value = "";
+
+var view = {
+    displayTodos : function () {
+        
+        if(todos.length===0){
+            todosUl.innerHTML='You have no todos !';
+        //if not display list and status
+        }else{
+            // show text of all todos and status 
+            todosUl.innerHTML='My todos : ';
+            for (var i = 0; i < todos.length; i++){
+                var thisTodoText = todos[i].todoText ;
+                var showTodo = function (todoText){
+                    // create and append a li to todosUl ul
+                    var aTodo = document.createElement("li"); 
+                    // check completed property and change status 
+                    if(todos[i].completed===true){
+                        // add strike tag
+                        var strikeThrough = document.createElement('strike');
+                        strikeThrough.innerHTML = todoText;
+                        aTodo.appendChild(strikeThrough);
+                    }else{aTodo.innerHTML = todoText;}
+                    aTodo.className = 'todo';
+                    todosUl.appendChild(aTodo);
+                };
+                showTodo(thisTodoText);
+            }
         }
-    },
-    displayTodos: function(){
-        todoList.displayTodos();
+    }
+};
+todoInput.addEventListener('keypress', function(e){
+    if(e.which==13){handlers.addTodo();} // or use e.keyCode or e.charCode == 13
+});
+var handlers = {
+    addTodo: function(){
+        // debugger;
+        if(todoInput.value){
+                todoList.addTodo(todoInput.value);
+                todoInput.value = "";
+        }
+        view.displayTodos();
     },
     changeTodo: function(){
         todoList.changeTodo(todoNum.valueAsNumber -1 , newTodoText.value);
         todoNum.value = "";         newTodoText.value = "";
+        view.displayTodos();
     },
     deleteTodo : function(){
       todoList.deleteTodo(todoNum.valueAsNumber-1);
       todoNum.value = "";
+      view.displayTodos();
     },
     toggleCompleted : function(){
-      todoList.toggleCompleted(todoNum.valueAsNumber -1);  
+      todoList.toggleCompleted(todoNum.valueAsNumber -1);
+      view.displayTodos();  
     },
     toggleAll : function(){
         todoList.toggleAll();
+        view.displayTodos();
     }
 };
 
@@ -121,3 +118,4 @@ var handlers = {
 // Add todo on keypress of Enter
 // Change todo on double click
 // Delete todo
+// Delete All completed
