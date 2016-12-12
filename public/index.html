@@ -7,17 +7,11 @@
 	<body>
 		<div id="" class="container">
 			<h1>Todo App</h1>
-			<div class="container-content">
+			<div id="wrapper" class="content-container">
 				<div class="small-container">
 					<div>
-						
-						<input type="text" id="todoInput" class="todo-text"  placeholder="what next ?">
+						<input type="text" id="addTodoInputField" class="text-field"  placeholder="Add a todo">
 					</div>
-					<div> 
-						<button class="btn"  onclick="handlers.changeTodo()">change todo</button>
-						<input type="text" id="newTodoText" class="todo-text">
-					</div>
-					
 					<div class="checkbox" onclick="handlers.toggleAll();">
 						<input type="checkbox"  name="toggleAll"  title="Toggle All"> 
 						<label for="toggleAllBtn"></label>

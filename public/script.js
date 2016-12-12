@@ -33,30 +33,30 @@ let todoList = {
 // =============== Variables ===============
 let todos = todoList.todos,
     todosUl = document.getElementById('todosUl');
-
 //=====================================
 let handlers = {
     addTodo() {
-        // debugger;
-        let todoInput = document.querySelector('#todoInput');
-        if(todoInput.value){
-                todoList.addTodo(todoInput.value);
-                todoInput.value = "";
+        const todoInputField = document.getElementById('addTodoInputField');
+        if(todoInputField.value){
+                todoList.addTodo(todoInputField.value);
+                todoInputField.value = "";
         }
         view.displayTodos();
     },
-    changeTodo(todoIndex, newText){
-        todoList.changeTodo(todoIndex, newText);
+    changeTodo(){
+        const todoInputField = document.getElementById('changeTodoInputField');
+        if (todoInputField.value){
+            todoList.changeTodo(todoInputField.parentNode.id , todoInputField.value);
+        }
         view.displayTodos();
     },
     deleteTodo(todoIndex) {
-      todoList.deleteTodo(parseInt(todoIndex));
-    //   todoNum.value = "";
-      view.displayTodos();
+        todoList.deleteTodo(parseInt(todoIndex));
+        view.displayTodos();
     },
     toggleCompleted(todoIndex) {
-      todoList.toggleCompleted(parseInt(todoIndex));
-      view.displayTodos();  
+        todoList.toggleCompleted(parseInt(todoIndex));
+        view.displayTodos();  
     },
     toggleAll () {
         todoList.toggleAll();
@@ -70,11 +70,9 @@ let view = {
             todosUl.innerHTML='You have no todos !';
         //if not display list and status
         }else{
-            let thisTodoText;
-            // show text of all todos and status 
             todosUl.innerHTML='My todos : ';
             todos.forEach((todo , index)=> { 
-                let todoTextNode = document.createTextNode(todo.todoText);
+                const todoTextNode = document.createTextNode(todo.todoText);
                 let todoLi = document.createElement("li");
                 todoLi.id = index ;
                 todoLi.appendChild(this.appendElmts.toggleBtns());
@@ -104,36 +102,56 @@ let view = {
             toggleBtn.type = "checkbox";
             toggleBtn.className = "toggle-completed";
             return toggleBtn ;
+        },
+        changeTodoField() {
+            const inputField = document.createElement('input');
+            inputField.type = "text";
+            inputField.className = "text-field";
+            inputField.id = "changeTodoInputField";
+            return inputField;
         }
     },
-    setupListeners: {
-        init () {
-            this.Listen();
-            todoInput.addEventListener('keypress', function(e){
-                if(e.which==13){
-                    handlers.addTodo();
-                } // or use e.keyCode or e.charCode == 13
-            });
-        },
-        Listen () {
-            todosUl.addEventListener('click', (event)=>{
-                let clickedButton = event.target;
-                const todoToDeleteIndex = clickedButton.parentNode.id;
-                if(clickedButton.className ==="delete-btn"){
-                    
-                    handlers.deleteTodo(todoToDeleteIndex);
-                } else if(clickedButton.className==="toggle-completed"){
-                    handlers.toggleCompleted(todoToDeleteIndex);
-                }
-            });
-        }
+    setupListeners() {
+        let wrapper = document.getElementById('wrapper');
+        // do relevent task, addTodo or changeTodo when Enter is pressed
+        wrapper.addEventListener('keypress', function(event){
+            const targetField = event.target; 
+            if(targetField.className === "text-field"  && event.key=='Enter'){
+                if(targetField.id==='addTodoInputField'){handlers.addTodo();}
+                else if(targetField.id==='changeTodoInputField'){handlers.changeTodo();}
+            }
+        });
+        // Leave input field When Escape key is pressed
+        wrapper.addEventListener('keyup', (event) =>{ 
+            const targetField = event.target;
+            if(targetField.className === "text-field"  && event.key == "Escape" ){this.displayTodos();}
+        });
+        // delete todo or togglecomplete when relevant button is pressed
+        todosUl.addEventListener('click', (event)=>{
+            const clickedButton = event.target;
+            const todoToDeleteIndex = clickedButton.parentNode.id;
+            if(clickedButton.className ==="delete-btn"){
+                handlers.deleteTodo(todoToDeleteIndex);
+            } else if(clickedButton.className==="toggle-completed"){
+                handlers.toggleCompleted(todoToDeleteIndex);
+            }
+        });
+        // create inputField to change todo
+        todosUl.addEventListener('dblclick' , (event)=>{
+            const clickedfield = event.target;
+            if(clickedfield.className ==='todo'){
+                const inputField = this.appendElmts.changeTodoField();
+                // grabs only the textContent of textNode which is second after 
+                // toggle complete input ;
+                const currentText = clickedfield.childNodes[1].textContent;
+                inputField.value = currentText;
+                clickedfield.innerHTML = "";
+                clickedfield.appendChild(inputField).focus();
+            }
+        });
     }
 };
-view.setupListeners.init();
+view.setupListeners();
 
 //TODO
-// Change todo on double click
-// Delete todo
 // Delete All completed
-//
-//** Problem within the loop running with eventlisteners
