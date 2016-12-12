@@ -75,16 +75,13 @@ let view = {
                 const todoTextNode = document.createTextNode(todo.todoText);
                 let todoLi = document.createElement("li");
                 todoLi.id = index ;
-                todoLi.appendChild(this.appendElmts.toggleBtns());
-                // check completed property and change status 
-                if(todo.completed===true){
-                    let strikeThrough = document.createElement('strike');
-                    strikeThrough.appendChild(todoTextNode);
-                    todoLi.appendChild(strikeThrough);
-                }else{
-                    todoLi.appendChild(todoTextNode) ;
-                }
                 todoLi.className = 'todo';
+                todoLi.appendChild(this.appendElmts.toggleBtns());
+                // check completed property and add completed class 
+                if(todo.completed===true){
+                    todoLi.className += " completed" ;
+                }
+                todoLi.appendChild(todoTextNode) ;
                 todoLi.appendChild(this.appendElmts.deleteBtns());
                 todosUl.appendChild(todoLi);
              });
