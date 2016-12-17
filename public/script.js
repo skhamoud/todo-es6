@@ -68,7 +68,6 @@ let view = {
     displayTodos () {
         if(todos.length===0){
             todosUl.innerHTML='You have no todos !';
-        //if not display list and status
         }else{
             todosUl.innerHTML='My todos : ';
             todos.forEach((todo , index)=> { 

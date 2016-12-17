@@ -42,7 +42,7 @@ gulp.task('serve', ['styles'], function(){
 
 // watches files and manually reloads after html files change
 gulp.task('watch' ,()=> {
-    gulp.watch(src.sass , ['styles']);
+    gulp.watch(`${src.sass}*` , ['styles']);
     gulp.watch(public + "*.js").on('change', reload);
     gulp.watch('./**/*.html').on('change', reload);
 })

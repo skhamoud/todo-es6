@@ -5,26 +5,22 @@
 		<meta name="viewport" content="width=device-width , initial-scale=1">
 	</head>
 	<body>
-		<div id="" class="container">
+		<div id="wrapper" class="container">
 			<h1>Todo App</h1>
-			<div id="wrapper" class="content-container">
-				<div class="small-container">
-					<div>
-						<input type="text" id="addTodoInputField" class="text-field"  placeholder="Add a todo">
-					</div>
-					<div class="checkbox" onclick="handlers.toggleAll();">
-						<input type="checkbox"  name="toggleAll"  title="Toggle All"> 
-						<label for="toggleAllBtn"></label>
-					</div>
+			<div class="inner-container">
+				<div class="toggle-all" onclick="handlers.toggleAll();">
+					<input type="checkbox"  name="toggleAll"  title="Toggle All">
+					<label for="toggleAllBtn"></label>
 				</div>
-				<div>
-					<ul id="todosUl"></ul>
-				</div>
+				<input type="text" id="addTodoInputField" class="text-field"  placeholder="Add a todo">
 
 			</div>
-			
+			<div>
+				<ul id="todosUl"></ul>
+			</div>
 		</div>
+
 		<script type="text/javascript" src="script.js"></script>
 	</body>
-	
+
 </html>
