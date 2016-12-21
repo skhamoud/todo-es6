@@ -32,7 +32,8 @@ let todoList = {
 
 // =============== Variables ===============
 let todos = todoList.todos,
-    todosUl = document.getElementById('todosUl');
+    todosUl = document.getElementById('todosUl'),
+    toggleAllCheckbox = document.getElementById("toggleAllBtn");
 //=====================================
 let handlers = {
     addTodo() {
@@ -67,37 +68,49 @@ let handlers = {
 let view = {
     displayTodos () {
         if(todos.length===0){
-            todosUl.innerHTML='You have no todos !';
+            todosUl.innerHTML='';
         }else{
-            todosUl.innerHTML='My todos : ';
+            todosUl.innerHTML = '';
+            let allCompleted = true;
             todos.forEach((todo , index)=> { 
                 const todoTextNode = document.createTextNode(todo.todoText);
-                let todoLi = document.createElement("li");
+                const todoLi = document.createElement("li");
+                let completeSatusCheck = "";
                 todoLi.id = index ;
                 todoLi.className = 'todo';
-                todoLi.appendChild(this.appendElmts.toggleBtns());
                 // check completed property and add completed class 
-                if(todo.completed===true){
-                    todoLi.className += " completed" ;
-                }
+                // if one is incomplete the allcompleted is false
+                if(todo.completed){
+                    todoLi.className += " completed";
+                    completeSatusCheck = true;
+                }else{allCompleted = false;} 
+                todoLi.appendChild(this.appendElmts.toggleCompletedBtn(todoLi.id, completeSatusCheck));
                 todoLi.appendChild(todoTextNode) ;
                 todoLi.appendChild(this.appendElmts.deleteBtns());
                 todosUl.appendChild(todoLi);
-             });
+            });
+            toggleAllCheckbox.checked = (allCompleted);
         }
     },
     appendElmts : {
         deleteBtns () {
             let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = "Delete";
             deleteButton.className = "delete-btn";
             return deleteButton ;
         },
-        toggleBtns () {
-            let toggleBtn = document.createElement('input');
+        toggleCompletedBtn(todoIndex, checkedStatus) {
+            const toggleDiv = document.createElement('div');
+            const toggleBtn = document.createElement('input');
+            const toggleBtnLabel = document.createElement('label');
+            toggleDiv.className = "toggle-completed";
+            toggleBtn.className = "toggle-checkbox";
             toggleBtn.type = "checkbox";
-            toggleBtn.className = "toggle-completed";
-            return toggleBtn ;
+            toggleBtn.checked = checkedStatus;
+            toggleBtn.id = `toggleTodo${todoIndex}`;
+            toggleBtnLabel.htmlFor = toggleBtn.id;
+            toggleDiv.appendChild(toggleBtn);
+            toggleDiv.appendChild(toggleBtnLabel);
+            return toggleDiv ;
         },
         changeTodoField() {
             const inputField = document.createElement('input');
@@ -108,7 +121,8 @@ let view = {
         }
     },
     setupListeners() {
-        let wrapper = document.getElementById('wrapper');
+        const wrapper = document.getElementById('wrapper');
+        const textInput = document.querySelectorAll('.text-field');
         // do relevent task, addTodo or changeTodo when Enter is pressed
         wrapper.addEventListener('keypress', function(event){
             const targetField = event.target; 
@@ -117,19 +131,30 @@ let view = {
                 else if(targetField.id==='changeTodoInputField'){handlers.changeTodo();}
             }
         });
-        // Leave input field When Escape key is pressed
+        // Leave input field When Escape key is pressed or it loses focus
         wrapper.addEventListener('keyup', (event) =>{ 
-            const targetField = event.target;
-            if(targetField.className === "text-field"  && event.key == "Escape" ){this.displayTodos();}
+            if(event.target.className === "text-field"  && event.key == "Escape" ){this.displayTodos();}
         });
-        // delete todo or togglecomplete when relevant button is pressed
+        wrapper.addEventListener('blur', (event) => {
+            if (event.target.className === "text-field") { this.displayTodos();}
+        }, true);
+        
+        // delete todo when relevant button is pressed
         todosUl.addEventListener('click', (event)=>{
             const clickedButton = event.target;
-            const todoToDeleteIndex = clickedButton.parentNode.id;
+            const todoIndex = clickedButton.parentNode.id;
             if(clickedButton.className ==="delete-btn"){
-                handlers.deleteTodo(todoToDeleteIndex);
-            } else if(clickedButton.className==="toggle-completed"){
-                handlers.toggleCompleted(todoToDeleteIndex);
+                handlers.deleteTodo(todoIndex);
+            }
+        });
+        // toggle completed todos or all todos 
+        wrapper.addEventListener('change', (event) => {
+            const clickedButton = event.target;
+            const todoIndex = clickedButton.parentNode.parentNode.id;
+            if (clickedButton.id === "toggleAllBtn") {
+                handlers.toggleAll();
+            } else if (clickedButton.className === "toggle-checkbox") {
+                handlers.toggleCompleted(todoIndex);
             }
         });
         // create inputField to change todo
@@ -138,7 +163,7 @@ let view = {
             if(clickedfield.className ==='todo'){
                 const inputField = this.appendElmts.changeTodoField();
                 // grabs only the textContent of textNode which is second after 
-                // toggle complete input ;
+                // toggle complete input ; (Will need some refractoring)
                 const currentText = clickedfield.childNodes[1].textContent;
                 inputField.value = currentText;
                 clickedfield.innerHTML = "";
