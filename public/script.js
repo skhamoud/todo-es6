@@ -96,6 +96,7 @@ let view = {
         deleteBtns () {
             let deleteButton = document.createElement('button');
             deleteButton.className = "delete-btn";
+            deleteButton.title = "Delete";
             return deleteButton ;
         },
         toggleCompletedBtn(todoIndex, checkedStatus) {
@@ -103,6 +104,7 @@ let view = {
             const toggleBtn = document.createElement('input');
             const toggleBtnLabel = document.createElement('label');
             toggleDiv.className = "toggle-completed";
+            toggleDiv.title = "Tick Completed";
             toggleBtn.className = "toggle-checkbox";
             toggleBtn.type = "checkbox";
             toggleBtn.checked = checkedStatus;
@@ -160,7 +162,7 @@ let view = {
         // create inputField to change todo
         todosUl.addEventListener('dblclick' , (event)=>{
             const clickedfield = event.target;
-            if(clickedfield.className ==='todo'){
+            if (clickedfield.className === 'todo') {
                 const inputField = this.appendElmts.changeTodoField();
                 // grabs only the textContent of textNode which is second after 
                 // toggle complete input ; (Will need some refractoring)

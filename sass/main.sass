@@ -1,10 +1,10 @@
 $white : #f9f9f9
 $lightgrey : #eeeeee
-$darkgrey : #656565
-$blackish : #0d0c15
+$darkgrey : #5d5b5b
+$blackish : #2f2e2e  
 $blue : #4295d1
 $red : #fa1453
-
+$green: #91d293
 
 // ========MIXINS=================
 @mixin shadow($col)
@@ -14,7 +14,7 @@ $red : #fa1453
 	height: 20px
 	position: absolute
 	top: 35%
-	left: -15px
+	left: 10px
 	bottom: 0
 	label
 		width: 20px
@@ -26,7 +26,7 @@ $red : #fa1453
 		background: #fcfff4
 		background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%)
 		border-radius: 4px
-		box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0, 0, 0, 0.5)
+		box-shadow: inset 1px 1px 25px white, 0px 1px 3px rgba(0, 0, 0, 0.5)
 		&:after
 			content: ''
 			width: 9px
@@ -56,29 +56,41 @@ $red : #fa1453
 
 body
 	margin : 0
-	background : $lightgrey
-	font-family : "Raleway", Helvetica, sans-serif
-	font-size: 1.2em
+	background : $darkgrey
+	font-family: 'Kalam', cursive
+	color: $blackish
 	display: flex
 	justify-content : center
-
 .container
 	margin-top : 100px
 	background : white
-	border-radius: 3px
-	@include shadow(grey)
+	border-radius: 5px
+	font-size: 1.3em
+	@include shadow($blackish)
 	width: 80vw
+	@media (max-width: 500px)
+		width: 100vw
+		margin: 0
+		border-radius: 0
+		font-size: 1em
 	h1
 		text-align: center
 		color : $blue
-
 	.inner-container 
 		position: relative
-		
 		border: 1px solid $lightgrey
+		padding-left: 30px
 		.toggle-all
 			@include createToggleBtn()
-			
+			top : 35%
+			label 
+				border-radius: 50%
+				&:after
+					width: 6px
+					height: 6px
+					top: 7px
+					left: 5px
+					transform: rotate(135deg)
 	ul
 		list-style : none
 		margin: 0
@@ -96,21 +108,24 @@ body
 			style : italic
 
 .todo 
-	display: block
+	display: flex
+	align-items: center
 	position: relative
-	padding: 20px 20px
+	padding: 20px 50px
 	border : solid 1px $lightgrey
+	cursor: pointer
 	.toggle-completed
-		display: block
 		@include createToggleBtn()
+	.text-field
+		padding: 0
 	.delete-btn
 		outline: none
 		background: none
 		border: none
-		font-family: inherit
+		font-family: Arial, Helvetica, sans-serif
 		font-size: 20px
-		font-weight: bold
-		color: $red 
+		font-weight: bolder
+		color: $red
 		position: absolute
 		top: 0
 		right: 5px
@@ -124,11 +139,8 @@ body
 			opacity: 1
 	&:hover .delete-btn
 		display: block
-			
 .completed
 	text-decoration: line-through
-	color : $darkgrey
+	color : $green
 
-// TODO : fix toggle btns
-// style todosUl and each todo
-// convert deletbtns to a tags x shaped
+// TODO : 
