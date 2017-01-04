@@ -1,6 +1,5 @@
-
 let todoList = {
-    todos : [],
+    todos: [],
     addTodo (todotext) {
         this.todos.push({
             todoText : todotext ,
@@ -11,29 +10,35 @@ let todoList = {
         this.todos[index].todoText = newtext;
     },
     toggleCompleted (index) { 
-        var thisTodo = this.todos[index];
+        const thisTodo = this.todos[index];
         thisTodo.completed = !thisTodo.completed;
     },
     deleteTodo (index) {
         this.todos.splice(index, 1) ;
     },
     toggleAll() {
-        var allCompleted = true;
+        let allCompleted = true;
         //if any todo is incomplete then allcompleted is false
-        todos.forEach((todo)=>{
+        this.todos.forEach((todo)=>{
             if(!todo.completed){allCompleted = false;}
         });
         // If all completed make them all incomplete if else make them all complete
-        todos.forEach((todo)=>{
+        this.todos.forEach((todo)=>{
             todo.completed = (allCompleted)?false:true;
-        });    
+        });
+    },
+    deleteAllCompleted() {
+        this.todos = this.todos.filter(todo => !todo.completed);
     }
+
 };
 
 // =============== Variables ===============
-let todos = todoList.todos,
-    todosUl = document.getElementById('todosUl'),
-    toggleAllCheckbox = document.getElementById("toggleAllBtn");
+let todosUl = document.getElementById('todosUl'),
+    toggleAllCheckbox = document.getElementById("toggleAllBtn"),
+    todosLeftSpan = document.querySelector(".todos-left"),
+    deleteAllBtn = document.querySelector(".delete-all");
+    
 //=====================================
 let handlers = {
     addTodo() {
@@ -62,16 +67,22 @@ let handlers = {
     toggleAll () {
         todoList.toggleAll();
         view.displayTodos();
+    },
+    deleteAllCompleted() {
+        todoList.deleteAllCompleted();
+        view.displayTodos();        
     }
 };
 //======================================================================
 let view = {
-    displayTodos () {
+    displayTodos() {
+        const todos = todoList.todos;
         if(todos.length===0){
             todosUl.innerHTML='';
         }else{
             todosUl.innerHTML = '';
             let allCompleted = true;
+            let todosLeft = 0;
             todos.forEach((todo , index)=> { 
                 const todoTextNode = document.createTextNode(todo.todoText);
                 const todoLi = document.createElement("li");
@@ -83,13 +94,19 @@ let view = {
                 if(todo.completed){
                     todoLi.className += " completed";
                     completeSatusCheck = true;
-                }else{allCompleted = false;} 
+                    
+                } else {
+                    allCompleted = false;
+                    todosLeft++;
+                } 
                 todoLi.appendChild(this.appendElmts.toggleCompletedBtn(todoLi.id, completeSatusCheck));
                 todoLi.appendChild(todoTextNode) ;
                 todoLi.appendChild(this.appendElmts.deleteBtns());
                 todosUl.appendChild(todoLi);
             });
             toggleAllCheckbox.checked = (allCompleted);
+            deleteAllBtn.style.display = (allCompleted)? "block":"none";
+            todosLeftSpan.textContent = todosLeft > 0 ? `${todosLeft} left.` : "";
         }
     },
     appendElmts : {

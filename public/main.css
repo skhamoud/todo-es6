@@ -1,6 +1,9 @@
 * {
   box-sizing: border-box; }
 
+.hidden {
+  display: none; }
+
 body {
   margin: 0;
   background: #5d5b5b;
@@ -174,3 +177,34 @@ body {
 .completed {
   text-decoration: line-through;
   color: #91d293; }
+
+footer {
+  position: relative;
+  padding: 10px 30px;
+  min-height: 46px; }
+
+.btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 0 40px 0;
+  font-size: .8em;
+  line-height: 1.25;
+  cursor: pointer;
+  outline: none;
+  color: #5d5b5b; }
+  .btn:hover {
+    border-bottom: 1px solid #d5d5d5; }
+
+.delete-all {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 8px; }
+  .delete-all:hover {
+    border-bottom: 1px dashed #d5d5d5; }
+
+.todos-left {
+  font-size: .8em; }
