@@ -35,7 +35,9 @@ let todoList = {
 
 // =============== Variables ===============
 let todosUl = document.getElementById('todosUl'),
-    toggleAllCheckbox = document.getElementById("toggleAllBtn");
+    toggleAllCheckbox = document.getElementById("toggleAllBtn"),
+    todosLeftSpan = document.querySelector(".todos-left"),
+    deleteAllBtn = document.querySelector(".delete-all");
     
 //=====================================
 let handlers = {
@@ -80,6 +82,7 @@ let view = {
         }else{
             todosUl.innerHTML = '';
             let allCompleted = true;
+            let todosLeft = 0;
             todos.forEach((todo , index)=> { 
                 const todoTextNode = document.createTextNode(todo.todoText);
                 const todoLi = document.createElement("li");
@@ -91,13 +94,19 @@ let view = {
                 if(todo.completed){
                     todoLi.className += " completed";
                     completeSatusCheck = true;
-                }else{allCompleted = false;} 
+                    
+                } else {
+                    allCompleted = false;
+                    todosLeft++;
+                } 
                 todoLi.appendChild(this.appendElmts.toggleCompletedBtn(todoLi.id, completeSatusCheck));
                 todoLi.appendChild(todoTextNode) ;
                 todoLi.appendChild(this.appendElmts.deleteBtns());
                 todosUl.appendChild(todoLi);
             });
             toggleAllCheckbox.checked = (allCompleted);
+            deleteAllBtn.style.display = (allCompleted)? "block":"none";
+            todosLeftSpan.textContent = todosLeft > 0 ? `${todosLeft} left.` : "";
         }
     },
     appendElmts : {

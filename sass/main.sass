@@ -47,13 +47,11 @@ $green: #91d293
 		&:checked+label::after
 			opacity: 1
 
-
-
-
-
 *
 	box-sizing: border-box
 
+.hidden
+	display: none
 body
 	margin : 0
 	background : $darkgrey
@@ -143,7 +141,9 @@ body
 	text-decoration: line-through
 	color : $green
 footer
+	position: relative
 	padding: 10px 30px
+	min-height: 46px
 .btn
 	display: inline-block
 	background: none
@@ -151,14 +151,22 @@ footer
 	border-radius: 3px
 	padding: 5px
 	margin: 0 40px 0
-	font-size: .7em
+	font-size: .8em
 	line-height: 1.25
 	cursor: pointer
 	outline: none
-	color: $blackish
+	color: $darkgrey
 	&:hover
 		border-bottom: 1px solid darken($lightgrey , 10%)
-.delete-all-completed:hover
-	border-bottom: 1px dashed darken($lightgrey , 10%)
+.delete-all
+	display: none
+	position: absolute
+	right: 0
+	bottom: 8px
+	&:hover
+		border-bottom: 1px dashed darken($lightgrey , 10%)
+
+.todos-left
+	font-size: .8em
 
 // TODO : 
