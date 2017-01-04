@@ -174,3 +174,24 @@ body {
 .completed {
   text-decoration: line-through;
   color: #91d293; }
+
+footer {
+  padding: 10px 30px; }
+
+.btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 0 40px 0;
+  font-size: .7em;
+  line-height: 1.25;
+  cursor: pointer;
+  outline: none;
+  color: #2f2e2e; }
+  .btn:hover {
+    border-bottom: 1px solid #d5d5d5; }
+
+.delete-all-completed:hover {
+  border-bottom: 1px dashed #d5d5d5; }
