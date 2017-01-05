@@ -8,28 +8,24 @@ body {
   margin: 0;
   background: #5d5b5b;
   font-family: 'Kalam', cursive;
-  color: #2f2e2e;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center; }
+  font-smoothing: antialiased;
+  color: #2f2e2e; }
 
 .container {
+  margin: 0 auto;
   margin-top: 100px;
   background: white;
   border-radius: 5px;
   font-size: 1.3em;
   box-shadow: 5px 5px 25px #2f2e2e;
-  width: 80vw; }
+  max-width: 800px; }
   @media (max-width: 500px) {
     .container {
-      width: 100vw;
-      margin: 0;
+      margin-top: 0;
       border-radius: 0;
       font-size: 1em; } }
   .container h1 {
+    margin: 0;
     text-align: center;
     color: #4295d1; }
   .container .inner-container {
@@ -101,16 +97,16 @@ body {
       outline: none; }
 
 .todo {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   position: relative;
+  color: inherit;
   padding: 20px 50px;
   border: solid 1px #eeeeee;
   cursor: pointer; }
+  .todo.completed {
+    text-decoration: line-through;
+    color: #91d293;
+    -webkit-transition: color 0.4s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+    transition: color 0.4s cubic-bezier(0.6, -0.28, 0.74, 0.05); }
   .todo .toggle-completed {
     width: 20px;
     height: 20px;
@@ -174,14 +170,10 @@ body {
   .todo:hover .delete-btn {
     display: block; }
 
-.completed {
-  text-decoration: line-through;
-  color: #91d293; }
-
 footer {
   position: relative;
   padding: 10px 30px;
-  min-height: 46px; }
+  min-height: 60px; }
 
 .btn {
   display: inline-block;
@@ -202,7 +194,7 @@ footer {
   display: none;
   position: absolute;
   right: 0;
-  bottom: 8px; }
+  bottom: 15px; }
   .delete-all:hover {
     border-bottom: 1px dashed #d5d5d5; }
 

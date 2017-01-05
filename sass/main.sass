@@ -56,22 +56,23 @@ body
 	margin : 0
 	background : $darkgrey
 	font-family: 'Kalam', cursive
+	font-smoothing: antialiased
 	color: $blackish
-	display: flex
-	justify-content : center
+	
 .container
+	margin: 0 auto
 	margin-top : 100px
 	background : white
 	border-radius: 5px
 	font-size: 1.3em
 	@include shadow($blackish)
-	width: 80vw
+	max-width: 800px
 	@media (max-width: 500px)
-		width: 100vw
-		margin: 0
+		margin-top : 0
 		border-radius: 0
 		font-size: 1em
 	h1
+		margin: 0
 		text-align: center
 		color : $blue
 	.inner-container 
@@ -106,12 +107,15 @@ body
 			style : italic
 
 .todo 
-	display: flex
-	align-items: center
 	position: relative
+	color: inherit
 	padding: 20px 50px
 	border : solid 1px $lightgrey
 	cursor: pointer
+	&.completed
+		text-decoration: line-through
+		color : $green
+		transition: color 0.4s cubic-bezier(0.6, -0.28, 0.74, 0.05)
 	.toggle-completed
 		@include createToggleBtn()
 	.text-field
@@ -137,13 +141,11 @@ body
 			opacity: 1
 	&:hover .delete-btn
 		display: block
-.completed
-	text-decoration: line-through
-	color : $green
+
 footer
 	position: relative
 	padding: 10px 30px
-	min-height: 46px
+	min-height: 60px
 .btn
 	display: inline-block
 	background: none
@@ -162,10 +164,9 @@ footer
 	display: none
 	position: absolute
 	right: 0
-	bottom: 8px
+	bottom: 15px
 	&:hover
 		border-bottom: 1px dashed darken($lightgrey , 10%)
-
 .todos-left
 	font-size: .8em
 

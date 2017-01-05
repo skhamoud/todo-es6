@@ -1,3 +1,5 @@
+"use strict";
+
 let todoList = {
     todos: [],
     addTodo (todotext) {
@@ -5,16 +7,19 @@ let todoList = {
             todoText : todotext ,
             completed : false
         });
+        
     },
     changeTodo (index, newtext) {
         this.todos[index].todoText = newtext;
+        
     },
     toggleCompleted (index) { 
         const thisTodo = this.todos[index];
         thisTodo.completed = !thisTodo.completed;
     },
     deleteTodo (index) {
-        this.todos.splice(index, 1) ;
+        this.todos.splice(index, 1);
+        
     },
     toggleAll() {
         let allCompleted = true;
@@ -29,8 +34,15 @@ let todoList = {
     },
     deleteAllCompleted() {
         this.todos = this.todos.filter(todo => !todo.completed);
+        
+    },
+    populateStorage() {
+        localStorage.clear();
+        if(this.todos.length>0) localStorage.setItem("todos", JSON.stringify(this.todos));
+    },
+    retrieveTodos() {
+        this.todos = JSON.parse(localStorage.getItem("todos")) || this.todos;
     }
-
 };
 
 // =============== Variables ===============
@@ -48,6 +60,7 @@ let handlers = {
                 todoInputField.value = "";
         }
         view.displayTodos();
+        todoList.populateStorage();
     },
     changeTodo(){
         const todoInputField = document.getElementById('changeTodoInputField');
@@ -55,34 +68,41 @@ let handlers = {
             todoList.changeTodo(todoInputField.parentNode.id , todoInputField.value);
         }
         view.displayTodos();
+        todoList.populateStorage();
     },
     deleteTodo(todoIndex) {
         todoList.deleteTodo(parseInt(todoIndex));
         view.displayTodos();
+        todoList.populateStorage();
     },
     toggleCompleted(todoIndex) {
         todoList.toggleCompleted(parseInt(todoIndex));
-        view.displayTodos();  
+        view.displayTodos();
+        todoList.populateStorage();  
     },
     toggleAll () {
         todoList.toggleAll();
         view.displayTodos();
+        todoList.populateStorage();
     },
     deleteAllCompleted() {
         todoList.deleteAllCompleted();
-        view.displayTodos();        
+        view.displayTodos();
+        todoList.populateStorage();
+        toggleAllCheckbox.checked = false;
+        deleteAllBtn.style.display = "none";
     }
 };
 //======================================================================
 let view = {
     displayTodos() {
         const todos = todoList.todos;
+        let allCompleted = true;
+        let todosLeft = 0,todosDone = 0;
         if(todos.length===0){
             todosUl.innerHTML='';
         }else{
             todosUl.innerHTML = '';
-            let allCompleted = true;
-            let todosLeft = 0;
             todos.forEach((todo , index)=> { 
                 const todoTextNode = document.createTextNode(todo.todoText);
                 const todoLi = document.createElement("li");
@@ -94,7 +114,7 @@ let view = {
                 if(todo.completed){
                     todoLi.className += " completed";
                     completeSatusCheck = true;
-                    
+                    todosDone++;
                 } else {
                     allCompleted = false;
                     todosLeft++;
@@ -105,7 +125,7 @@ let view = {
                 todosUl.appendChild(todoLi);
             });
             toggleAllCheckbox.checked = (allCompleted);
-            deleteAllBtn.style.display = (allCompleted)? "block":"none";
+            deleteAllBtn.style.display = (todosDone>0)? "block":"none";
             todosLeftSpan.textContent = todosLeft > 0 ? `${todosLeft} left.` : "";
         }
     },
@@ -191,7 +211,11 @@ let view = {
         });
     }
 };
-view.setupListeners();
-
+function setup() {
+    todoList.retrieveTodos();
+    view.setupListeners();
+    view.displayTodos();
+}
+setup();
 //TODO
-// Delete All completed
+// store details with the text of todo
