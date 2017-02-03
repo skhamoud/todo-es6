@@ -218,4 +218,3 @@ function setup() {
 }
 setup();
 //TODO
-// store details with the text of todo
